@@ -1,0 +1,134 @@
+1.
+import java.util.*;  
+class Employee {  
+int id,salary;  
+String name,department;  
+ 
+public Employee(int id, String name, int salary, String department) {  
+    this.id = id;  
+    this.name = name;  
+    this.salary = salary;  
+    this.department = department;  
+}  
+}  
+public class Hashset {  
+public static void main(String[] args) {  
+    HashSet<Employee> set=new HashSet<Employee>();  
+    Employee b1=new Employee(10,"Mukul",20000,"FullStack");  
+    Employee b2=new Employee(11,"Satyajeet",20000,"Database");  
+
+    
+    set.add(b1);  
+    set.add(b2);
+     
+    
+    for(Employee b:set){  
+    System.out.println(b.id+" "+b.name+" "+b.salary+" "+b.department);  
+    }  
+}  
+}  
+op:
+11 Satyajeet 20000 Database
+10 Mukul 20000 FullStack
+
+
+2. 
+import java.util.*;
+public class keyValue {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		HashMap<Integer, Double> map=new HashMap<>();
+		
+		map.put(10, 10.10);
+		map.put(11, 11.10);
+		map.put(12, 12.10);
+		map.put(13, 13.10);
+		map.put(14, 14.10);
+		map.put(15, 15.10);
+		map.put(16, 16.10);
+		map.put(17, 17.10);
+		map.put(18, 18.10);
+		map.put(19, 19.10);
+		
+		System.out.println("Size of HashMap : "+ map.size());
+		System.out.println("-----------------------------------");
+		System.out.println("Key = Value");
+		System.out.println( map);
+		System.out.println( map.keySet());
+		System.out.println( map.values());
+		
+	}
+
+}
+op:
+Size of HashMap : 10
+-----------------------------------
+Key = Value
+{16=16.1, 17=17.1, 18=18.1, 19=19.1, 10=10.1, 11=11.1, 12=12.1, 13=13.1, 14=14.1, 15=15.1}
+[16, 17, 18, 19, 10, 11, 12, 13, 14, 15]
+[16.1, 17.1, 18.1, 19.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1]
+
+3.
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class ExchangeArray {
+
+public static final <T> void swap (T[] a, int i, int j) {
+T t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+
+public static final <T> void swap (List<T> b, int i, int j) {
+Collections.<T>swap(b, i, j);
+}
+
+private static void swap1() {
+Integer [] a = {25, 20};
+swap(a, 0, 1);
+System.out.println("a:"+Arrays.toString(a));
+List<Integer> b = new ArrayList<Integer>(Arrays.asList(a));
+swap(b, 0, 1);
+System.out.println("b:"+b);
+}
+public static void main(String args[])
+{
+swap1();
+}
+}
+op:
+a:[20, 25]
+b:[25, 20]
+
+
+4.
+import java.util.*;
+import java.util.HashMap;
+
+
+public class Pair {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		//Condition1
+		HashMap<String ,String>map=new HashMap<String,String>();
+		map.put("1", "Mango");
+		map.put("2", "Pinapple");
+		System.out.println(map);
+		
+		//Condition2
+		HashMap<String ,Date>map1=new HashMap<String,Date>();
+		map1.put("Today is", new java.util.Date());
+		System.out.println(map1);
+	}
+
+}
+op:
+{1=Mango, 2=Pinapple}
+{Today is=Mon Jan 17 12:54:45 IST 2022}
