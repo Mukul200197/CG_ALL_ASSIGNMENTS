@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ 
+ 
+ 	<bean autowire="byName" class="ContextAware" id="ca">
+ 	</bean>
+  
+	<bean class="Point" id="pointA">
+  		<property name="x" value="0"></property>
+ 		<property name="y" value="0"></property>
+	</bean>
+  
+	<bean class="Point" id="pointB">
+  		<property name="x" value="-20"></property>
+  		<property name="y" value="0"></property>
+	</bean>
+  
+	<bean class="Point" id="pointC">
+   		<property name="x" value="20"></property>
+   		<property name="y" value="0"></property>
+	</bean>
+
+
+</beans>
