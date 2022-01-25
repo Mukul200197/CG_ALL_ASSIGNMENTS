@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">	
+
+	<bean id="address1" class="Address" >
+	<property name="city" value=" Mumbai " />
+	<property name="state" value=" MH " />
+	<property name="country" value=" INDIA " />
+	<property name="zip" value=" 123456 " />
+	<property name="street" value=" Marine Drive" />
+	</bean>
+	
+	<bean id="obj" class="Customer" >
+	<property name="custID" value="20" />
+	<property name="custNM" value="MUKUL" />
+	<property name="custNO" value="9766186458" />
+	<property name="address" ref="address1" />
+	</bean>
+
+
+
+
+</beans>
