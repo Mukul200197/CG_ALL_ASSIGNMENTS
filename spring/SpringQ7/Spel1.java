@@ -7,7 +7,7 @@ public class Spel1 {
 		
 		 
 ExpressionParser parser = new SpelExpressionParser();
-Expression exp = parser.parseExpression("'Hello Abhi'.bytes.length");  
+Expression exp = parser.parseExpression("'Hello MukulHupare'.bytes.length");  
 int length = (Integer) exp.getValue();  
 System.out.println(length);  
 		 
