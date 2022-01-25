@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+ 
+	<bean id="que" class="Question">
+ 		<constructor-arg value="20"></constructor-arg>
+ 		<constructor-arg value="Why Spring is Popular..?" />
+ 		<constructor-arg>
+ 			<list>
+ 			<value>1. It Support All Framework</value>
+ 			<value>2. Spring is used for Enterprise Level Application</value>
+ 			</list>
+ 		</constructor-arg>
+ 		<constructor-arg>
+ 			<set>
+ 			<value>1. All the  frameworks are supported by spring like Structs,Hibernate and Jsf.</value>
+ 			<value>2. simple learning curves</value>
+ 			</set>
+ 		</constructor-arg>
+ 		<constructor-arg>
+ 			<map>
+ 				<entry key="1" value="Spring Framework" />
+ 				<entry key="2" value="SpringBoot Framework" />
+ 			</map>
+ 		</constructor-arg>
+ 		
+ 	</bean>
+ 
+ 
+ </beans>
