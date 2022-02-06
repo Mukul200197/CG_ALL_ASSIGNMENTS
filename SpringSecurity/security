@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 
-package com.example.login;
+package com.example.login; //MukulHupare
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -90,25 +90,7 @@ Index.html (Template Folder)
 </html>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//Database-MukulHupare
 
 Q.3 Login with Database
 package com.example.JDBC;
