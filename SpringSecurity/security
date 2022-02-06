@@ -1,1 +1,419 @@
 
+Q.2 Custom Login Page Using Spring Security
+package com.example.login;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+    	http.authorizeRequests().anyRequest()
+    	.authenticated().and()
+    	.formLogin().loginPage("/login")
+    	.usernameParameter("email")
+    	.permitAll()
+    	.and().logout()
+    	.permitAll();
+    }
+}
+
+package com.example.login;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class MvcConfig implements WebMvcConfigurer {
+ 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+    }
+}
+
+
+package com.example.login;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+@Controller
+public class CommonController {
+    @GetMapping("/page")
+    public String viewLoginPage() {     
+        return "login";
+    }
+}
+
+package com.example.login;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
+@SpringBootApplication(exclude = {ErrorMvcAutoConfiguration.class})
+public class LoginApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(LoginApplication.class, args);
+	}
+}
+
+Index.html (Template Folder)
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Login -MUKUL</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container-fluid text-center" align="center">
+    <form th:action="@{/login}" method="post" style="max-width: 300px; margin: 0 auto;">
+        
+        <div class="border border-secondary p-3 rounded">
+            <p>
+                <input type="email" name="email" class="form-control" placeholder="E-mail" required />
+            </p>
+            <p>
+                <input type="password" name="password" class="form-control" placeholder="Password" required />
+            </p>
+            <p>
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>      
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q.3 Login with Database
+package com.example.JDBC;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeResource {
+
+	@GetMapping("/")
+	public String home() {
+		return ("<h1>Welcome</h1>");
+	}
+	
+	@GetMapping("/user")
+	public String user() {
+		return ("<h1>Welcome User</h1>");
+	}
+	
+	@GetMapping("/admin")
+	public String admin() {
+		return ("<h1>Welcome Admin</h1>");
+	}
+}
+
+package com.example.JDBC;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+
+@EnableWebSecurity
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	DataSource dataSource;
+	
+	
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// TODO Auto-generated method stub
+		
+		auth.jdbcAuthentication()
+			.dataSource(dataSource);
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+
+		http.authorizeRequests()
+			.antMatchers("/admin").hasRole("ADMIN")
+			.antMatchers("/user").hasAnyRole("ADMIN", "USER")
+			.antMatchers("/").permitAll()
+			.and().formLogin();
+	}
+	
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
+	
+
+}
+
+package com.example.JDBC;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@SpringBootApplication
+public class SecuritySecurityJdbcApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(SecuritySecurityJdbcApplication.class, args);
+	}
+}
+Schema.sql
+create table users(
+	username varchar_ignorecase(50) not null primary key,
+	password varchar_ignorecase(50) not null,
+	enabled boolean not null
+);
+
+create table authorities(
+	username varchar_ignorecase(50) not null,
+	authority varchar_ignorecase(50) not null,
+	constraint fk_authorities_users foreign key(username) references users(username)
+);
+
+create unique index ix_auth_username on authorities (username, authority);
+
+data.sql
+INSERT INTO users (username, password, enabled)
+	values('user', 'pass',true);
+	
+	
+INSERT INTO users (username, password, enabled)
+	values('admin', 'pass', true);
+	
+INSERT INTO authorities (username, authority)
+	values('user', 'ROLE_USER');
+	
+INSERT INTO authorities (username, authority)
+	values('admin', 'ROLE_ADMIN');
+
+5. Remember Me..
+package com.example.login;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+    	http.authorizeRequests().anyRequest()
+    	.authenticated().and()
+    	.formLogin().loginPage("/login")
+    	.usernameParameter("email")
+    	.permitAll()
+    	.and().logout()
+    	.permitAll();
+    }
+}
+
+package com.example.login;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class MvcConfig implements WebMvcConfigurer {
+ 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+    }
+}
+
+
+package com.example.login;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+@Controller
+public class CommonController {
+    @GetMapping("/page")
+    public String viewLoginPage() {     
+        return "login";
+    }
+}
+
+package com.example.login;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
+@SpringBootApplication(exclude = {ErrorMvcAutoConfiguration.class})
+public class LoginApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(LoginApplication.class, args);
+	}
+}
+
+Index.html (Template Folder)
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Login -MUKUL</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container-fluid text-center" align="center">
+    <form th:action="@{/login}" method="post" style="max-width: 300px; margin: 0 auto;">
+        
+        <div class="border border-secondary p-3 rounded">
+            <p>
+                <input type="email" name="email" class="form-control" placeholder="E-mail" required />
+            </p>
+            <p>
+                <input type="password" name="password" class="form-control" placeholder="Password" required />
+            </p>
+            <p>
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>      
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q.3 Login with Database
+package com.example.JDBC;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeResource {
+
+	@GetMapping("/")
+	public String home() {
+		return ("<h1>Welcome</h1>");
+	}
+	
+	@GetMapping("/user")
+	public String user() {
+		return ("<h1>Welcome User</h1>");
+	}
+	
+	@GetMapping("/admin")
+	public String admin() {
+		return ("<h1>Welcome Admin</h1>");
+	}
+}
+
+package com.example.JDBC;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+
+@EnableWebSecurity
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	DataSource dataSource;
+	
+	
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// TODO Auto-generated method stub
+		
+		auth.jdbcAuthentication()
+			.dataSource(dataSource);
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+
+		http.authorizeRequests()
+			.antMatchers("/admin").hasRole("ADMIN")
+			.antMatchers("/user").hasAnyRole("ADMIN", "USER")
+			.antMatchers("/").permitAll()
+			.and().rememberMe()
+.and().formLogin();
+	}
+	
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
+	
+
+}
+
+package com.example.JDBC;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@SpringBootApplication
+public class SecuritySecurityJdbcApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(SecuritySecurityJdbcApplication.class, args);
+	}
+}
